@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Open gnome-control-center without sidebar panel and in any desktop
+
+mkdir -p ~/.cache/gnome-control-center-simplified/gtk-4.0
+
+# Change css to hide sidebar
+echo 'navigation-split-view > .sidebar-pane {
+transform: scale(0);
+}
+
+navigation-split-view > .content-pane {
+margin-left: -15em;
+}
+
+.back {
+margin-left: -1000px;
+transform: scale(0.9);
+transform-origin: -1000px;
+
+}
+
+.icon {
+margin-left: -1000px;
+}' > ~/.cache/gnome-control-center-simplified/gtk-4.0/gtk.css
+
+# Need select category to open in gnome control center
+if [[ -z "$1" ]]; then
+    XDG_CONFIG_HOME="$HOME/.cache/gnome-control-center-simplified/" XDG_CURRENT_DESKTOP=gnome gnome-control-center --list
+    echo "Include one option from before list to open"
+    exit
+fi
+
+# Change Current Desktop to open in any desktop and change Config folder to force css changes
+XDG_CONFIG_HOME="$HOME/.cache/gnome-control-center-simplified/" XDG_CURRENT_DESKTOP=gnome gnome-control-center "$@"
